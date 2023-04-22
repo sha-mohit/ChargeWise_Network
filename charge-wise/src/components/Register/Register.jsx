@@ -9,7 +9,6 @@ import {
 }
 from 'mdb-react-ui-kit';
 import './Register.css';
-import background from "../../images/background.jpg"
 import Branding from '../Branding/Branding';
 import Footer from '../Common/Footer';
 
@@ -17,23 +16,16 @@ function Register() {
     const [customer,setCustomer] = useState("user");
     const register=()=>{
         console.log("Registered")
-        console.log(customer);
+        window.location.href = "/"
     }
     const signin=()=>{
-        window.location.href = "./"
+        window.location.href = "/"
     }
     const onChangeCustomer=(e)=>{
         setCustomer(e.target.value);
     }
   return (
-    <div  style={{ 
-        backgroundImage: `url(${background})`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        width: '100vw',
-        height: '100vh',
-        overflow:'auto'
-      }}>
+    <div>
 
         <MDBContainer className="my-5 gradient-form">
 
@@ -46,10 +38,10 @@ function Register() {
                             <img src="https://images-eu.ssl-images-amazon.com/images/I/51hImFSpM9L.png"
                                 style={{width: '8vw', borderRadius:'100px'}} alt="logo" />
                             <div>
-                            <   Branding/>
+                                <Branding/>
                             </div>
                         </div>
-
+                        <br/>
                         <h2 className="mt-1 md pb-5"><center>Register</center></h2>
 
                         <div className='d-flex flex-row justify-content-center' style={{padding:`0rem 0rem 1rem 1rem`}}>

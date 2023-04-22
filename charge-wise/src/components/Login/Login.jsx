@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   MDBContainer,
@@ -9,36 +9,30 @@ import {
 }
 from 'mdb-react-ui-kit';
 import './Login.css';
-import background from "../../images/background.jpg"
 import Branding from '../Branding/Branding';
 import Footer from '../Common/Footer';
 
 function Login() {
+    const [customer,setCustomer] = useState("user");
     const register=()=>{
         window.location.href = "/register"
     }
     const signin=()=>{
-        window.location.href = "./userview"
+        localStorage.setItem("customer",customer)
+        window.location.href = "/home"
     }
     const onChangeCustomer=(e)=>{
-        console.log("clicked +",e.target.value)
+        setCustomer(e.target.value)
     }
   return (
-    <div  style={{ 
-        backgroundImage: `url(${background})`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        width: '100vw',
-        height: '100vh',
-        overflow:'auto'
-      }}>
+    <div>
 
         <MDBContainer className="my-5 gradient-form">
 
             <MDBRow className="g-0">
         
                 <MDBCol col='6' className="mb-5">
-                    <div className="d-flex flex-column ms-5 justify-content-center bg-white h-100" style={{padding:`2rem`}}>
+                    <div className="d-flex flex-column ms-5 justify-content-center bg-white h-100" style={{padding:'1rem'}}>
 
                         <div className="text-center">
                             <img src="https://images-eu.ssl-images-amazon.com/images/I/51hImFSpM9L.png"
@@ -48,6 +42,7 @@ function Login() {
                             </div>
                         </div>
 
+                        <br/>
                         <h2 className="mt-1 md pb-5"><center>Login</center></h2>
 
                         <div className='d-flex flex-row justify-content-center' style={{padding:`0rem 0rem 1rem 1rem`}}>

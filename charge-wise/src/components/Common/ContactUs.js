@@ -1,9 +1,10 @@
 import React from "react";
+import Footer from "./Footer";
 
 const ContactUs = () => {
 return (
-	<div className="contact">
-	<h1>Contact us</h1>
+	<div>
+		<h1>Contact us</h1>
 	</div>
 );
 };

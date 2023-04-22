@@ -4,7 +4,7 @@ const Branding = () => {
 
     return (
     <div >
-        <h4 className="mt-1 mb-5 pb-1">ChargeWise Network</h4>
+        <h4>ChargeWise Network</h4>
     </div> 
     )
 }
