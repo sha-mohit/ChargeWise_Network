@@ -9,16 +9,16 @@ import {
 }
 from 'mdb-react-ui-kit';
 import './Login.css';
-import background from "../../background.jpg"
+import background from "../../images/background.jpg"
 import Branding from '../Branding/Branding';
-import Footer from '../Footer';
+import Footer from '../Common/Footer';
 
 function Login() {
     const register=()=>{
         window.location.href = "./about-us"
     }
     const signin=()=>{
-        window.location.href = "./contact"
+        window.location.href = "./userview"
     }
     const onChangeCustomer=(e)=>{
         console.log("clicked +",e.target.value)
