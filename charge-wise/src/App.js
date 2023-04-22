@@ -4,12 +4,14 @@ import Contact from "./components/Common/ContactUs";
 import Support from "./components/Common/Support";
 import Login from "./components/Login/Login";
 import UserView from "./components/User/UserView";
+import Register from "./components/Register/Register";
 
 function App() {
 return (
 	<Router>
 	<Routes>
 		<Route path="/" element={<Login/>}/>
+		<Route path="/register" element={<Register/>}/>
 		<Route path='/about-us' element={<AboutUs/>} />
 		<Route path='/about-us/aim' element={<OurAim/>} />
 		<Route path='/about-us/vision' element={<OurVision/>} />

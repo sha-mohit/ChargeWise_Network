@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   MDBContainer,
@@ -8,20 +8,22 @@ import {
   MDBRadio
 }
 from 'mdb-react-ui-kit';
-import './Login.css';
+import './Register.css';
 import background from "../../images/background.jpg"
 import Branding from '../Branding/Branding';
 import Footer from '../Common/Footer';
 
-function Login() {
+function Register() {
+    const [customer,setCustomer] = useState("user");
     const register=()=>{
-        window.location.href = "/register"
+        console.log("Registered")
+        console.log(customer);
     }
     const signin=()=>{
-        window.location.href = "./userview"
+        window.location.href = "./"
     }
     const onChangeCustomer=(e)=>{
-        console.log("clicked +",e.target.value)
+        setCustomer(e.target.value);
     }
   return (
     <div  style={{ 
@@ -48,25 +50,26 @@ function Login() {
                             </div>
                         </div>
 
-                        <h2 className="mt-1 md pb-5"><center>Login</center></h2>
+                        <h2 className="mt-1 md pb-5"><center>Register</center></h2>
 
                         <div className='d-flex flex-row justify-content-center' style={{padding:`0rem 0rem 1rem 1rem`}}>
                             <MDBRadio name='customer' id='user' value='user' label='User' inline defaultChecked color='success' onChange={onChangeCustomer}/>
                             <MDBRadio name='customer' id='provider' value='provider' label='Provider' inline onChange={onChangeCustomer}/>
                         </div>
+                        {customer.includes("user")?<MDBInput wrapperClass='mb-4' placeholder='User name' id='name' type='name'/>:<MDBInput wrapperClass='mb-4' placeholder='Organization name' id='name' type='name'/>}
                         <MDBInput wrapperClass='mb-4' placeholder='Email address' id='email' type='email'/>
                         <MDBInput wrapperClass='mb-4' placeholder='Password' id='password' type= 'password'/>
+                        <MDBInput wrapperClass='mb-4' placeholder='Confirm password' id='confirm' type= 'password'/>
 
 
                         <div className="text-center pt-1 mb-5 pb-1">
-                            <button className="text-white mb-4 w-100 gradient-custom-2" onClick={signin}>Sign in</button>
-                            <a className="text-muted" href="#!">Forgot password?</a>
+                            <button className="text-white mb-4 w-100 gradient-custom-2" onClick={register}>Sign Up</button>
                         </div>
 
                         <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
-                            <p className="mb-0">Don't have an account?</p>
-                            <button className="text-white mx-2 gradient-custom-2" onClick={register}>
-                                Register
+                            <p className="mb-0">Already a user?</p>
+                            <button className="text-white mx-2 gradient-custom-2" onClick={signin}>
+                                Sign In
                             </button>
                         </div>
 
@@ -91,4 +94,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
