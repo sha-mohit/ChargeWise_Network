@@ -3,8 +3,8 @@
   "name": "ChargeWise Network",
   "icons": [
     {
-      "src": "/logo.PNG",
-      "sizes": "144x144",
+      "src": "./logo.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
