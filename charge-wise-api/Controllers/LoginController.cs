@@ -23,11 +23,8 @@ namespace charge_wise_api.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet]
-        public JsonResult Get()
+        void getDetailsFromDB(string query, DataTable table)
         {
-            string query = @"select UserId, UserName,UserEmail,Password,UserRole from dbo.Login";
-            DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("ChargeWiseCon");
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
@@ -41,6 +38,14 @@ namespace charge_wise_api.Controllers
                     myCon.Close();
                 }
             }
+        }
+
+        [HttpGet]
+        public JsonResult Get()
+        {
+            string query = @"select UserId, UserName,UserEmail,Password,UserRole from dbo.Login";
+            DataTable table = new DataTable();
+            getDetailsFromDB(query, table);
             return new JsonResult(table);
         }
 
@@ -48,23 +53,24 @@ namespace charge_wise_api.Controllers
         [Route("[action]")]
         public ActionResult IsUser(Login login)
         {
-            string query = @"select UserRole from dbo.Login where UserEmail = '"+ login.UserEmail +"' and Password = '"+login.Password+"'";
+            string query = @"select UserRole from dbo.Login where UserEmail = '" + login.UserEmail + "' and Password = '" + login.Password + "'";
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("ChargeWiseCon");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
+            getDetailsFromDB(query, table);
             if (table.Rows.Count > 0)
                 return new JsonResult(table);
+            else
+                return new JsonResult("No User Found");
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public ActionResult IsExistingUser(Login login)
+        {
+            string query = @"select UserRole from dbo.Login where UserEmail = '" + login.UserEmail + "'";
+            DataTable table = new DataTable();
+            getDetailsFromDB(query, table);
+            if (table.Rows.Count > 0)
+                return new JsonResult("User Already Exists");
             else
                 return new JsonResult("No User Found");
         }
