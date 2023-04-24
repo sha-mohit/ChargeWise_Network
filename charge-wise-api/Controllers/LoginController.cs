@@ -45,6 +45,31 @@ namespace charge_wise_api.Controllers
         }
 
         [HttpPost]
+        [Route("[action]")]
+        public ActionResult IsUser(Login login)
+        {
+            string query = @"select UserRole from dbo.Login where UserEmail = '"+ login.UserEmail +"' and Password = '"+login.Password+"'";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("ChargeWiseCon");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+            if (table.Rows.Count > 0)
+                return new JsonResult(table);
+            else
+                return new JsonResult("No User Found");
+        }
+
+        [HttpPost]
         public JsonResult Post(Login login)
         {
             string query = @"insert into dbo.Login values (@UserName,@UserEmail,@Password,@UserRole)";
