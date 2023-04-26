@@ -1,41 +1,85 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { REST_URL } from '../../apiUrl';
 import {
   MDBContainer,
   MDBRow,
   MDBCol,
   MDBInput,
-  MDBRadio
+  MDBBtn
 }
 from 'mdb-react-ui-kit';
 import './Login.css';
 import Branding from '../Branding/Branding';
 import Footer from '../Common/Footer';
+import logo from '../../images/logo.PNG'
 
 function Login() {
-    const [customer,setCustomer] = useState("user");
+    const [role,setRole] = useState("User")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
+    const onChangeEmail=(e)=>{
+        setEmail(e.target.value)
+    }
+    const onChangePassword=(e)=>{
+        setPassword(e.target.value)
+    }
+
     const register=()=>{
         window.location.href = "/register"
     }
     const signin=()=>{
-        localStorage.setItem("customer",customer)
-        window.location.href = "/home"
+        if(email === "")
+        {
+            alert('Please Enter Email')
+        }
+        else if(password === "")
+        {
+            alert('Please Enter Password')
+        }
+        else
+        {
+            var body ={
+                UserEmail: email,
+                Password: password
+            }
+            let headers = new Headers();
+            headers.append('Accept','application/json');
+            headers.append('Content-Type','application/json');
+            headers.append('POST','GET');
+            fetch(`${REST_URL}/api/login/isuser`,{
+                headers: headers,
+                method: 'POST',
+                body: JSON.stringify(body)
+                })
+                .then(response=>{return response.json()})
+                .then(res=>{
+                    if(res !== "No User Found")
+                    {
+                        setRole(res.UserRole)
+                        localStorage.setItem("role",role)
+                        window.location.href = "/home"
+                    }
+                    else
+                    {
+                        alert("Please check your credentials")
+                    }}
+            )
+        }
     }
-    const onChangeCustomer=(e)=>{
-        setCustomer(e.target.value)
-    }
+
   return (
     <div>
-
         <MDBContainer className="my-5 gradient-form">
 
             <MDBRow className="g-0">
         
                 <MDBCol col='6' className="mb-5">
-                    <div className="d-flex flex-column ms-5 justify-content-center bg-white h-100" style={{padding:'1rem'}}>
+                    <div className="d-flex flex-column ms-5 justify-content-center bg-white h-100" style={{padding:'2rem'}}>
 
                         <div className="text-center">
-                            <img src="https://images-eu.ssl-images-amazon.com/images/I/51hImFSpM9L.png"
+                            <img src={logo}
                                 style={{width: '8vw', borderRadius:'100px'}} alt="logo" />
                             <div>
                             <   Branding/>
@@ -44,13 +88,8 @@ function Login() {
 
                         <br/>
                         <h2 className="mt-1 md pb-5"><center>Login</center></h2>
-
-                        <div className='d-flex flex-row justify-content-center' style={{padding:`0rem 0rem 1rem 1rem`}}>
-                            <MDBRadio name='customer' id='user' value='user' label='User' inline defaultChecked color='success' onChange={onChangeCustomer}/>
-                            <MDBRadio name='customer' id='provider' value='provider' label='Provider' inline onChange={onChangeCustomer}/>
-                        </div>
-                        <MDBInput wrapperClass='mb-4' placeholder='Email address' id='email' type='email'/>
-                        <MDBInput wrapperClass='mb-4' placeholder='Password' id='password' type= 'password'/>
+                        <MDBInput wrapperClass='mb-4' placeholder='Email address' id='email' type='email' onChange={onChangeEmail} required/>
+                        <MDBInput wrapperClass='mb-4' placeholder='Password' id='password' type= 'password' onChange={onChangePassword} required/>
 
 
                         <div className="text-center pt-1 mb-5 pb-1">

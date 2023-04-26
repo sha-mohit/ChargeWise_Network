@@ -8,12 +8,16 @@ import {
   MDBNavbarNav,
   MDBNavbarItem,
   MDBNavbarLink,
-  MDBDropdown,
   MDBCollapse,
-  MDBCardImage
+  MDBDropdownToggle,
+  MDBDropdown,
+  MDBDropdownMenu,
+  MDBDropdownItem
 } from 'mdb-react-ui-kit';
 import Branding from '../Branding/Branding';
-import image from '../../images/background.jpg'
+import logo from "../../images/logo.PNG"
+import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { FaChevronCircleLeft, FaChevronDown } from 'react-icons/fa';
 
 export default function Header() {
   const [showBasic, setShowBasic] = useState(false);
@@ -26,6 +30,13 @@ export default function Header() {
             {/* <img src="https://images-eu.ssl-images-amazon.com/images/I/51hImFSpM9L.png"
                 style={{width: '2rem', borderRadius:'100px', padding: '2px'}} alt="logo" />
             <br/> */}
+            <img
+                    src={logo}
+                    height="40rem"
+                    width="40rem"
+                    alt="ChargeWise Network Logo"
+                    loading="lazy"
+                    />
             <div>
               <Branding/>
             </div>
@@ -67,6 +78,24 @@ export default function Header() {
             </MDBNavbarItem>
           </MDBNavbarNav>
         </MDBCollapse>
+        <Menu className="d-flex align-items-center me-5 gradient-custom-2" style={{ width:'10px'}}>
+
+              <MenuButton>
+                  <img
+                      src="https://th.bing.com/th/id/OIP.jYffRb9EeYK_FVnbyYJspwHaHo?pid=ImgDet&rs=1"
+                      className="rounded-circle"
+                      height="50px"
+                      width="50px"
+                      alt="Profile"
+                      loading="lazy"
+                  />
+                </MenuButton>
+                  <MenuList className='gradient-custom-2'>
+                    <MenuItem style={{width:'max-content', padding:'2px'}}>
+                        <a className="text-dark lg" href="/">Logout</a>
+                    </MenuItem>
+                  </MenuList>
+          </Menu>
       </MDBContainer>
     </MDBNavbar>
   );
