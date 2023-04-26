@@ -21,8 +21,9 @@ import {
   import { useRef, useState } from 'react'
 import { MDBCard } from 'mdb-react-ui-kit'
 import { MDBBox } from 'mdbreact'
+import React from 'react';
   
-  const center = { lat: 17.4443, lng: 78.3745 }
+
   
   function Map() {
     const { isLoaded } = useJsApiLoader({
@@ -34,6 +35,13 @@ import { MDBBox } from 'mdbreact'
     const [directionsResponse, setDirectionsResponse] = useState(null)
     const [distance, setDistance] = useState('')
     const [duration, setDuration] = useState('')
+    const [currentLocation, setCurrentLocation] = useState('')
+     React.useEffect(()=>{
+     navigator.geolocation.getCurrentPosition((position)=>{
+      setCurrentLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+     })
+
+    },[])
   
     /** @type React.MutableRefObject<HTMLInputElement> */
     const originRef = useRef()
@@ -81,18 +89,18 @@ import { MDBBox } from 'mdbreact'
           <Box position='absolute' left={0} top={0} h='100%' w='100%'>
             {/* Google Map Box */}
             <GoogleMap
-              center={center}
+              center={currentLocation}
               zoom={15}
               mapContainerStyle={{ width: '100%', height: '100%' }}
               options={{
-                zoomControl: false,
-                streetViewControl: false,
-                mapTypeControl: false,
-                fullscreenControl: false,
+                zoomControl: true,
+                streetViewControl: true,
+                mapTypeControl: true,
+                fullscreenControl: true,
               }}
               onLoad={map => setMap(map)}
             >
-              <Marker position={center} />
+              <Marker key={2} position={currentLocation} />
               {directionsResponse && (
                 <DirectionsRenderer directions={directionsResponse} />
               )}
@@ -144,7 +152,7 @@ import { MDBBox } from 'mdbreact'
               icon={<FaLocationArrow />}
               isRound
               onClick={() => {
-                map.panTo(center)
+                map.panTo(currentLocation)
                 map.setZoom(15)
               }}
             />
