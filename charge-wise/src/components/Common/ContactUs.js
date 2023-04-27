@@ -1,9 +1,17 @@
 import React from "react";
-import Footer from "./Footer";
+import background from '../../images/background.jpg'
 
 const ContactUs = () => {
 return (
-	<div>
+	<div  style={{ 
+        backgroundImage: `url(${background})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        width: '100vw',
+        height: '100vh',
+        overflow:'auto',
+		minHeight:'100%',
+      }}>
 		<h1>Contact us</h1>
 	</div>
 );

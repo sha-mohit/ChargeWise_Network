@@ -8,16 +8,11 @@ import {
   MDBNavbarNav,
   MDBNavbarItem,
   MDBNavbarLink,
-  MDBCollapse,
-  MDBDropdownToggle,
-  MDBDropdown,
-  MDBDropdownMenu,
-  MDBDropdownItem
+  MDBCollapse
 } from 'mdb-react-ui-kit';
 import Branding from '../Branding/Branding';
 import logo from "../../images/logo.PNG"
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { FaChevronCircleLeft, FaChevronDown } from 'react-icons/fa';
 
 export default function Header() {
   const [showBasic, setShowBasic] = useState(false);

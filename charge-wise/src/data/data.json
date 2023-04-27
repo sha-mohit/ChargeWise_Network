@@ -1,0 +1,79 @@
+{
+  "Header": {
+    "title": "We are ChargeWise Network",
+    "paragraph": "A network of electric vehicle charging stations powered by renewable energy, promoting sustainable transportation and reducing carbon emissions."
+  },
+  "About": {
+    "paragraph": "Need to write about",
+    "Why": [
+      "some points",
+      "1",
+      "2",
+      "3"
+    ]
+  },
+  "Services": [
+    {
+      "icon": "fa fa-wordpress",
+      "name": "Providing Business",
+      "text": ""
+    },
+    {
+      "icon": "fa fa-cart-arrow-down",
+      "name": "Fetching Near by Charging stations",
+      "text": ""
+    },
+    {
+      "icon": "fa fa-cloud-download",
+      "name": "Some other feature",
+      "text": ""
+    }
+  ],
+  "Team": [
+    {
+      "img": "img/team/mohit.png",
+      "name": "Mohit SHARMA",
+      "job": "Technical Lead"
+    },
+    {
+      "img": "img/team/srija.png",
+      "name": "Srija GURRAM",
+      "job": "Senior Software Developer"
+    },
+    {
+      "img": "img/team/soujanya.png",
+      "name": "Soujanya VALLURI",
+      "job": "Principal Software Developer"
+    }
+  ],
+  "Contact": {
+    "address": "4321 California St, San Francisco, CA 12345 ",
+    "phone": "+1 123 456 1234",
+    "email": "info@company.com",
+    "facebook": "fb.com",
+    "twitter": "twitter.com",
+    "youtube": "youtube.com"
+  },
+  "Features": [
+    {
+      "icon": "fa fa-comments-o",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    },
+    {
+      "icon": "fa fa-bullhorn",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    },
+    {
+      "icon": "fa fa-group",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    },
+    {
+      "icon": "fa fa-magic",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    }
+  ]
+}

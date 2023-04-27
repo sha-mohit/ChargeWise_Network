@@ -8,29 +8,23 @@ import Home from "./components/Home/Home";
 import Header from "./components/Common/Header";
 import Footer from "./components/Common/Footer";
 import background from "./images/background.jpg"
+import Landing from "./components/Landing/Landing.jsx";
 
 function App() {
 return (
-	<div  style={{ 
-        backgroundImage: `url(${background})`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        width: '100vw',
-        height: '100vh',
-        overflow:'auto',
-		minHeight:'100%',
-      }}>
+	<div>
 		<Router>
-			{window.location.pathname !== "/" &&  window.location.pathname !== "/register"? <Header /> : null}
+			{window.location.pathname !== "/" && window.location.pathname !== "/login" &&  window.location.pathname !== "/register"? <Header /> : null}
 			<Routes>
-				<Route path="/" element={<Login/>}/>
+				<Route path="/" element={<Landing/>}/>
+				<Route path="/login" element={<Login/>}/>
 				<Route path="/register" element={<Register/>}/>
 				<Route path="/home" element={<Home/>}/>
 				<Route path='/about-us' element={<AboutUs/>} />
 				<Route path='/contact' element={<Contact/>} />
 				<Route path='/support' element={<Support/>} />
 			</Routes>
-			{window.location.pathname !== "/" &&  window.location.pathname !== "/register" && window.location.pathname !== "/home" ?<div style={{left:0,bottom:0,right:0, position:'absolute'}}>
+			{window.location.pathname !== "/" && window.location.pathname !== "/login" &&  window.location.pathname !== "/register" && window.location.pathname !== "/home" ?<div style={{left:0,bottom:0,right:0, position:'absolute'}}>
 				<Footer/>
 			</div>:null}
 		</Router>
