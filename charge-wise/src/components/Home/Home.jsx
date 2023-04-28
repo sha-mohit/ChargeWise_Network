@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "../Common/Footer";
 import UserView from "../User/UserView"
-import background from '../../images/background.jpg'
+import background from '../../images/landing2.jpg'
 
 const Home = () => {
 return (

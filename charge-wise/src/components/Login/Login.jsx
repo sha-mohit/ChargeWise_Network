@@ -6,7 +6,9 @@ import {
   MDBRow,
   MDBCol,
   MDBInput,
-  MDBCard
+  MDBCard,
+  MDBValidation,
+  MDBValidationItem
 }
 from 'mdb-react-ui-kit';
 import './Login.css';
@@ -15,7 +17,7 @@ import Footer from '../Common/Footer';
 import logo from '../../images/logo.PNG'
 import { motion } from "framer-motion";
 import { Image } from '@chakra-ui/react';
-import background from '../../images/background.jpg'
+import background from '../../images/landing2.jpg'
 import ev from '../../images/ev.gif'
 
 function Login() {
@@ -34,15 +36,7 @@ function Login() {
         window.location.href = "/register"
     }
     const signin=()=>{
-        if(email === "")
-        {
-            alert('Please Enter Email')
-        }
-        else if(password === "")
-        {
-            alert('Please Enter Password')
-        }
-        else
+        if(email!=="" && password!=="")
         {
             var body ={
                 UserEmail: email,
@@ -88,7 +82,7 @@ function Login() {
             <MDBRow className="g-0">
         
                 <MDBCol col='6' className="mb-5">
-                    <div className="d-flex flex-column ms-5 justify-content-center bg-white h-100" style={{padding:'2rem'}}>
+                    <div className="d-flex flex-column ms-5 justify-content-center bg-white h-100" style={{padding:'1rem'}}>
 
                         <div className="text-center">
                             <motion.div
@@ -107,14 +101,19 @@ function Login() {
                         <br/>
                          
                         <motion.h2 whileHover={{scale:1.1}} className="mt-1 md pb-5"><center>Login</center></motion.h2>
-                        <MDBInput wrapperClass='mb-4' placeholder='Email address' id='email' type='email' onChange={onChangeEmail} required/>
-                        <MDBInput wrapperClass='mb-4' placeholder='Password' id='password' type= 'password' onChange={onChangePassword} required/>
+                        <MDBValidation>
+                            <MDBValidationItem invalid feedback="Email address cannot be empty">
+                                <MDBInput wrapperClass='mb-4' placeholder='Email address' id='email' type='email' onChange={onChangeEmail} required/>
+                            </MDBValidationItem>
+                            <MDBValidationItem invalid feedback="Password cannot be empty">
+                                <MDBInput wrapperClass='mb-4' placeholder='Password' id='password' type= 'password' onChange={onChangePassword} required/>
+                            </MDBValidationItem>
 
-
-                        <div className="text-center pt-1 mb-5 pb-1">
-                            <button className="text-white mb-4 w-100 gradient-custom-2" onClick={signin}>Sign in</button>
-                            <a className="text-muted" href="#!">Forgot password?</a>
-                        </div>
+                            <div className="text-center pt-1 mb-5 pb-1">
+                                <button className="text-white mb-4 w-100 gradient-custom-2" onClick={signin}>Sign in</button>
+                                <a className="text-muted" href="#!">Forgot password?</a>
+                            </div>
+                        </MDBValidation>
 
                         <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
                             <p className="mb-0">Don't have an account?</p>

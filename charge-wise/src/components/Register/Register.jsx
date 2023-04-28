@@ -18,7 +18,7 @@ import Footer from '../Common/Footer';
 import logo from '../../images/logo.PNG'
 import {motion} from 'framer-motion'
 import { Image } from '@chakra-ui/react';
-import background from '../../images/background.jpg'
+import background from '../../images/landing2.jpg'
 import ev from '../../images/ev.gif'
 
 function Register() {
@@ -57,7 +57,7 @@ function Register() {
     }
 
     const register=(e)=>{
-        e.preventDefault()
+        //e.preventDefault()
         if(name !== "" && email !== "" && password !== "" && confirmPassword !=="")
         {
             var body = {
@@ -135,7 +135,7 @@ function Register() {
                             <MDBRadio name='role' id='User' value='User' label='User' inline defaultChecked color='success' onChange={onChangeRole}/>
                             <MDBRadio name='role' id='Provider' value='Provider' label='Provider' inline onChange={onChangeRole}/>
                         </div>
-                        <MDBValidation isValidated>
+                        <MDBValidation>
                             {role.includes("User")?
                             <MDBValidationItem invalid feedback="Username cannot be empty">
                                 <MDBInput wrapperClass='mb-4' placeholder='User name' id='name' type='name' onChange={onChangeName} required/>

@@ -7,7 +7,6 @@ import Register from "./components/Register/Register";
 import Home from "./components/Home/Home";
 import Header from "./components/Common/Header";
 import Footer from "./components/Common/Footer";
-import background from "./images/background.jpg"
 import Landing from "./components/Landing/Landing.jsx";
 
 function App() {

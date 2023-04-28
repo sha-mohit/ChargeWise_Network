@@ -6,16 +6,17 @@ import logo from "../../images/logo.PNG"
 export const Navigation = (props) => {
   const [showBasic, setShowBasic] = useState(false);
   return (
-    <nav id="menu" className="navbar navbar-default navbar-fixed-top gradient-custom-2">
+    <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
         <div className="navbar-header">
-        {/* <img
+            <img
                     src={logo}
                     height="40rem"
                     width="40rem"
                     alt="ChargeWise Network Logo"
                     loading="lazy"
-                    /> */}
+                    style={{paddingRight:'3px'}}
+                    />
           <a className="navbar-brand page-scroll" href="#page-top">
             ChargeWise Network
           </a>{" "}
