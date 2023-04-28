@@ -16,6 +16,7 @@ import { MDBBox } from 'mdbreact'
 import Places from "./Places";
 import Distance from "./Distance";
 import MapTheme from "./MapTheme";
+import List from '../Tiles/List';
 
 function Map() {
 
@@ -29,6 +30,8 @@ function Map() {
     const mapRef = useRef();
     const [currentLocation, setCurrentLocation] = useState(/** @type google.maps.LatLng */({ lat: 17.4442, lng: 78.3932 }))
     const [searchLocation, setSearchLocation] = useState(null);
+    const [isShown, setIsShown] = useState(true)
+    const [names,setNames] = useState(['Hyderabad','Banglore','delhi','Chennai'])
 
    
   React.useEffect(()=>{
@@ -109,7 +112,6 @@ function Map() {
     <Flex
       position='relative'
       flexDirection='column'
-      alignItems='center'
       h='80vh'
       w='98vw'
     >
@@ -173,30 +175,28 @@ function Map() {
               </>
             )}
             <Marker key={1} position={currentLocation} />
-            
           </GoogleMap>
         </Box>
       </MDBBox>
       
-      <MDBCard background='white'>
-      <Box
+      <div style={{padding:'5rem 5rem 5rem 0rem', width:'30rem'}} >
+      <MDBCard background='tranparent'>
+        <Box
         p={4}
         borderRadius='lg'
-        m={4}
         bgColor='white'
-        shadow='base'
-        zIndex='1'
       >
         <HStack spacing={2} justifyContent='space-between'>
-          <Box flexGrow={1}>
-          <h1>Ev Station?</h1>
+          <Box>
+          <h3>Search for EV station</h3>
            <Places
             setOffice={(position) => {
+              //setIsShown(!isShown)
               setSearchLocation(position);
               mapRef.current?.panTo(position);
             }}
           />
-          {!searchLocation && <p>Enter the address of EV station.</p>}
+          {/* {!searchLocation && <p>Enter the address of EV station.</p>} */}
           {directions && <Distance leg={directions.routes[0].legs[0]} />} 
           </Box>
           <IconButton
@@ -211,6 +211,8 @@ function Map() {
         </HStack>
         </Box>
       </MDBCard>
+      {isShown&&(<List names={names}/>)}
+      </div>
     </Flex>
   )
 }
