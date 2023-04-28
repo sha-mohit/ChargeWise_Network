@@ -11,7 +11,7 @@ namespace charge_wise_api.Models
         DatabaseContext db = new DatabaseContext();
 
         //To get all plugin images
-        public IEnumerable<PlugInImages> GetAllPlugInImages()
+        public List<PlugInImages> GetAllPlugInImages()
         {
             try
             {
@@ -83,6 +83,7 @@ namespace charge_wise_api.Models
                 throw;
             }
         }
+              
 
     }
 }

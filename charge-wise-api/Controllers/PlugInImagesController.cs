@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using charge_wise_api.Models;
+using System.Drawing;
+using System;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace charge_wise_api.Controllers
 {
@@ -43,6 +47,27 @@ namespace charge_wise_api.Controllers
         public int Delete(int id)
         {
             return plugInImage.DeletePlugInImage(id);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public ActionResult RetrieveImage(int ID)
+        {
+            List<PlugInImages> Images = plugInImage.GetAllPlugInImages();
+            byte[] imageData = Images.Find(x => x.Plugin_Image_Id == ID).PlugIn_Image;
+            string imageBase64Data = Convert.ToBase64String(Images.Find(x => x.Plugin_Image_Id == ID).PlugIn_Image); ;
+            //string imageDataURL = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+
+            Image image;
+            byte[] imageBytes = Convert.FromBase64String(imageBase64Data);
+            using (var ms = new MemoryStream(imageBytes))
+            {
+                image = Image.FromStream(ms);
+            }
+            string imageFormat = ImageFormat.Png.ToString().ToLower();
+            string html = $"<img src=\"data:image/{imageFormat};base64,{imageBase64Data}\"/>";
+
+            return new JsonResult(html);
         }
 
     }
