@@ -15,7 +15,6 @@ import { MDBCard } from 'mdb-react-ui-kit'
 import { MDBBox } from 'mdbreact'
 import Places from "./Places";
 import Distance from "./Distance";
-import "./Map.css";
 import MapTheme from "./MapTheme";
 
 function Map() {
