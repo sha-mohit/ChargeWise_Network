@@ -12,7 +12,7 @@ import usePlacesAutocomplete, {
   import "@reach/combobox/styles.css";
   
 
-  export default function Places({ setOffice }) {
+  export default function Places({ setStation }) {
     const {
       ready,
       value,
@@ -27,7 +27,7 @@ import usePlacesAutocomplete, {
   
       const results = await getGeocode({ address: val });
       const { lat, lng } = await getLatLng(results[0]);
-      setOffice({ lat, lng });
+      setStation({ lat, lng });
     };
   
     return (

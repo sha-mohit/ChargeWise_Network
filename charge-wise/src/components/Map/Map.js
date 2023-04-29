@@ -1,4 +1,4 @@
-import {Box,Flex,HStack,IconButton,SkeletonText,} from '@chakra-ui/react'
+import {Box,Flex,HStack,IconButton,} from '@chakra-ui/react'
 import React,{ useState, useMemo, useCallback, useRef } from "react";
 import { FaLocationArrow } from 'react-icons/fa'
 import {
@@ -20,18 +20,13 @@ import List from '../Tiles/List';
 
 function Map() {
 
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ['places'],
-  })
-
-  const [directions, setDirections] = useState(null);
-    //const [map, setMap] = useState(/** @type google.maps.Map */ (null))
+    const [directions, setDirections] = useState(null);
     const mapRef = useRef();
     const [currentLocation, setCurrentLocation] = useState(/** @type google.maps.LatLng */({ lat: 17.4442, lng: 78.3932 }))
-    const [searchLocation, setSearchLocation] = useState(null);
+    const [searchLocation, setSearchLocation] = useState(/** @type google.maps.LatLng */({ lat: 17.443421, lng: 78.374511 }));
     const [isShown, setIsShown] = useState(true)
     const [names,setNames] = useState(['Hyderabad','Banglore','delhi','Chennai'])
+    const [isLoaded, setIsLoaded] = useState(0)
 
    
   React.useEffect(()=>{
@@ -46,9 +41,7 @@ function Map() {
     if(mapRef.current===null || mapRef.current===undefined){
       return;
     }
-    if(searchLocation===null){
-      setSearchLocation(currentLocation);
-    }
+    console.log("fetchEVStations"+position.lat)
     const _stations = [];
     const request = {
       location: position,
@@ -66,6 +59,7 @@ function Map() {
           lat: results[i].geometry.location.lat(),
           lng: results[i].geometry.location.lng(),
         });
+        //createMarker(results[i]);
       }
 
       //mapRef.current.setCenter(results[0].geometry.location);
@@ -73,7 +67,24 @@ function Map() {
     }); 
     return _stations;
   };
+  function createMarker(place) {
+    if (!place.geometry || !place.geometry.location) return;
+  
+    let map = mapRef.current;
+    // eslint-disable-next-line no-undef
+    const marker = new google.maps.Marker({
+      map,
+      position: place.geometry.location,
+      icon:"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
+    });
+    
+    /* google.maps.event.addListener(marker, "click", () => {
+      infowindow.setContent(place.name || "");
+      infowindow.open(map);
+    }); */
+  }
   const fetchDirections = (station) => {
+    
     if (!searchLocation) return;
     clearRoute();
     // eslint-disable-next-line no-undef
@@ -93,21 +104,15 @@ function Map() {
     );
   }; 
   function clearRoute() {
-    //setDirections(null)
+    setDirections(null)
   };
-/*   const options = useMemo(
-    () => ({
-      mapId: "b181cac70f27f5e6",
-      disableDefaultUI: true,
-      clickableIcons: false,
-    }),
-    []
-  ); */
-  const onLoad = useCallback((map) => (mapRef.current = map), []);
-  const stations = useMemo(() => fetchEVStations(currentLocation), [currentLocation]);
-  if (!isLoaded) {
-    return <SkeletonText />
-  }
+
+  const onLoad = useCallback((map) => {(mapRef.current = map)
+                              //console.log("inside load")
+                              setSearchLocation(currentLocation)
+                              
+                            }, []);
+  const stations = useMemo(() => fetchEVStations(searchLocation), [searchLocation]);
   return (
     <Flex
       position='relative'
@@ -119,10 +124,10 @@ function Map() {
         <Box position='absolute' left={0} top={0} h='100%' w='100%'>
           {/* Google Map Box */}
           <GoogleMap
-            defaultZoom={1}
-            //defaultCenter={{ lat: 45.4211, lng: -75.6903 }}
+            defaultZoom={10}
+            defaultCenter={currentLocation}
             defaultOptions={{ styles: MapTheme }}
-            center={currentLocation}
+            center={searchLocation}
             zoom={12}
             mapContainerStyle={{ width: '100%', height: '100%' }}
             options={{
@@ -174,7 +179,7 @@ function Map() {
                 <Circle center={searchLocation} radius={45000} options={farOptions} />
               </>
             )}
-            <Marker key={1} position={currentLocation} />
+            <Marker position={currentLocation} />
           </GoogleMap>
         </Box>
       </MDBBox>
@@ -190,7 +195,7 @@ function Map() {
           <Box>
           <h3>Search for EV station</h3>
            <Places
-            setOffice={(position) => {
+            setStation={(position) => {
               //setIsShown(!isShown)
               setSearchLocation(position);
               mapRef.current?.panTo(position);
