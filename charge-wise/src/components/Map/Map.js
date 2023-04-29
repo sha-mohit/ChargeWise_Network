@@ -114,6 +114,11 @@ function Map() {
     setDirections(null)
   };
 
+  function handleFeasibleLocations()
+  {
+    //Write feasible locations code
+  }
+
   const onLoad = useCallback((map) => {(mapRef.current = map)}, []);
   const stations = useMemo(() => fetchEVStations(searchLocation), [searchLocation]);
   return (
@@ -190,6 +195,11 @@ function Map() {
       
       <div style={{padding:'5rem 5rem 0rem 0rem', width:'30rem'}} >
         <MDBCard>
+        {localStorage.getItem("role")!== null && localStorage.getItem("role").includes("Provider")?
+            <div style={{padding:'1rem'}}>
+                <button className="text-dark" style={{padding:'1rem', backgroundColor:'#5dd8e9'}} onClick={handleFeasibleLocations}>Get Feasible Locations for Charging Station</button>
+            </div>
+            :null}
           <Box
           p={4}
           borderRadius='lg'
