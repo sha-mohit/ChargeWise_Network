@@ -23,7 +23,7 @@ return (
 				<Route path='/contact' element={<Contact/>} />
 				<Route path='/support' element={<Support/>} />
 			</Routes>
-			{window.location.pathname !== "/" && window.location.pathname !== "/login" &&  window.location.pathname !== "/register" && window.location.pathname !== "/home" ?<div style={{left:0,bottom:0,right:0, position:'absolute'}}>
+			{window.location.pathname !== "/" && window.location.pathname !== "/login" &&  window.location.pathname !== "/register" ?<div style={{left:0,bottom:0,right:0, position:'relative'}}>
 				<Footer/>
 			</div>:null}
 		</Router>

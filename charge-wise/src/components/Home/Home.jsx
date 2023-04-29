@@ -11,8 +11,7 @@ return (
         backgroundRepeat: 'no-repeat',
         width: '100vw',
         height: '100vh',
-        overflow:'auto',
-		minHeight:'100%',
+        overflow:'hidden',
       }}>
         {localStorage.getItem("role")!== null && localStorage.getItem("role").includes("Provider")?
         <div style={{padding:'2rem'}}>
@@ -22,7 +21,6 @@ return (
         <div style={{padding:'2rem 0rem 0rem 0.5rem'}}>
                 <UserView/>
         </div>
-        <Footer/>
     </div>
 );
 };

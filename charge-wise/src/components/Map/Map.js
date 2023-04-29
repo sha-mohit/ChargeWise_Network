@@ -1,15 +1,12 @@
-import {Box,Flex,HStack,IconButton,} from '@chakra-ui/react'
+import {Box,Flex,HStack,IconButton,SkeletonText,} from '@chakra-ui/react'
 import React,{ useState, useMemo, useCallback, useRef } from "react";
 import { FaLocationArrow } from 'react-icons/fa'
 import {
-  useJsApiLoader,
   GoogleMap,
   Marker,
   DirectionsRenderer,
   Circle,
-  MarkerClusterer,
-  InfoWindow,
-  Autocomplete,
+  MarkerClusterer
 } from "@react-google-maps/api";
 import { MDBCard } from 'mdb-react-ui-kit'
 import { MDBBox } from 'mdbreact'
@@ -25,8 +22,8 @@ function Map() {
     const [currentLocation, setCurrentLocation] = useState(/** @type google.maps.LatLng */({ lat: 17.4442, lng: 78.3932 }))
     const [searchLocation, setSearchLocation] = useState(/** @type google.maps.LatLng */({ lat: 17.443421, lng: 78.374511 }));
     const [isShown, setIsShown] = useState(true)
-    const [names,setNames] = useState(['Hyderabad','Banglore','delhi','Chennai'])
-    const [isLoaded, setIsLoaded] = useState(0)
+    const [locations,setLocations] = useState([])
+	  const [isLoaded, setIsLoaded] = useState(0)
 
    
   React.useEffect(()=>{
@@ -52,6 +49,9 @@ function Map() {
     const service = new google.maps.places.PlacesService(mapRef.current);
     service.textSearch(request, (results, status) => {
       console.log(results);
+      var temp =[]
+      results.map((result)=>( console.log(result),temp.push({"id":result.place_id,"name":result.name,"status":result.business_status,"rating":result.rating,"address":result.formatted_address,"photos":result.icon})))
+      setLocations(temp)
       // eslint-disable-next-line no-undef
     if (status === google.maps.places.PlacesServiceStatus.OK && results) {
       for (let i = 0; i < results.length; i++) {
@@ -117,7 +117,7 @@ function Map() {
     <Flex
       position='relative'
       flexDirection='column'
-      h='80vh'
+      h='90vh'
       w='98vw'
     >
       <MDBBox>
@@ -184,39 +184,41 @@ function Map() {
         </Box>
       </MDBBox>
       
-      <div style={{padding:'5rem 5rem 5rem 0rem', width:'30rem'}} >
-      <MDBCard background='tranparent'>
-        <Box
-        p={4}
-        borderRadius='lg'
-        bgColor='white'
-      >
-        <HStack spacing={2} justifyContent='space-between'>
-          <Box>
-          <h3>Search for EV station</h3>
-           <Places
-            setStation={(position) => {
-              //setIsShown(!isShown)
-              setSearchLocation(position);
-              mapRef.current?.panTo(position);
-            }}
-          />
-          {/* {!searchLocation && <p>Enter the address of EV station.</p>} */}
-          {directions && <Distance leg={directions.routes[0].legs[0]} />} 
+      <div style={{padding:'5rem 5rem 0rem 0rem', width:'30rem'}} >
+        <MDBCard>
+          <Box
+          p={4}
+          borderRadius='lg'
+          bgColor='white'
+        >
+          <HStack spacing={2} justifyContent='space-between'>
+            <Box>
+            <h3>Search for EV station</h3>
+            <Places
+              setStation={(position) => {
+                setIsShown(!isShown)
+                setSearchLocation(position);
+                mapRef.current?.panTo(position);
+              }}
+            />
+            {/* {!searchLocation && <p>Enter the address of EV station.</p>} */}
+            {directions && <Distance leg={directions.routes[0].legs[0]} />} 
+            </Box>
+            <IconButton
+              aria-label='center back'
+              icon={<FaLocationArrow />}
+              isRound
+              onClick={() => {
+                mapRef.current.panTo(currentLocation)
+                mapRef.current.setZoom(15)
+              }}
+            />
+          </HStack>
           </Box>
-          <IconButton
-            aria-label='center back'
-            icon={<FaLocationArrow />}
-            isRound
-            onClick={() => {
-              mapRef.current.panTo(currentLocation)
-              mapRef.current.setZoom(15)
-            }}
-          />
-        </HStack>
-        </Box>
-      </MDBCard>
-      {isShown&&(<List names={names}/>)}
+        </MDBCard>
+      </div>
+      <div>
+      {isShown&&(<List locations={locations}/>)}
       </div>
     </Flex>
   )
