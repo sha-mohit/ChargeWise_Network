@@ -36,7 +36,7 @@ function Map() {
   },[])
   
   const fetchEVStations = (position) => {
-    if(mapRef.current===null || mapRef.current===undefined ){
+    if(mapRef.current===null || mapRef.current===undefined ||position===null){
       return;
     }
     const _stations = [];
@@ -114,9 +114,70 @@ function Map() {
     setDirections(null)
   };
 
-  function handleFeasibleLocations()
+  async function getAllPathCoordinate (){
+    const routes = [];
+    //for (let i = 0; i < currentStations.length; i++) {  
+      for (let i = 0; i < 10; i++) {  
+     // eslint-disable-next-line no-undef
+     const service = new google.maps.DirectionsService();
+      
+        service.route(
+        {
+          origin: searchLocation,
+          destination: currentStations[i].chargingStation.geometry.location,
+          // eslint-disable-next-line no-undef
+          travelMode: google.maps.TravelMode.DRIVING,
+         },
+         (result, status) => {
+          console.log(status)
+           if (status === "OK" && result) {
+            
+            routes.push(result);
+            }
+          }
+        );
+        await timeout(1000); //for 1 sec delay
+        
+    }
+    console.log(routes)
+    filterByRouteDistance (routes);
+  }
+  function filterByRouteDistance (routes){
+
+    const filteredRoutes = [];
+    for (let i = 0; i < routes.length; i++) { 
+      if(routes[i].routes[0].legs[0].distance.value>6000){//6km
+        filteredRoutes.push(routes[i])
+      }
+    }
+    identifySuitableLocationOnPath(filteredRoutes)
+  }
+  function identifySuitableLocationOnPath (filteredRoutes){
+
+    const suitableLocations = [];
+    for (let i = 0; i < filteredRoutes.length; i++) { 
+      let distribution =( Math.floor(
+        (filteredRoutes[i].routes[0].legs[0].distance.value) / 3000 )
+      );
+      let pathDistribution =( Math.floor(
+        (filteredRoutes[i].routes[0].overview_path.length) / distribution )
+      );
+      console.log("pathDistribution-->"+pathDistribution+"--lenth-->"+filteredRoutes[i].routes[0].overview_path.length)
+      for (let j = 1; j < distribution; j++) { 
+        suitableLocations.push(filteredRoutes[i].routes[0].overview_path[pathDistribution*(j)])
+      }
+    }
+    setCurrentStations([...currentStations,...suitableLocations]);
+  }
+  function timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
+  }
+  async function handleFeasibleLocations()
   {
-    //Write feasible locations code
+    if(!currentStations) return;
+    
+    getAllPathCoordinate();
+  
   }
 
   const onLoad = useCallback((map) => {(mapRef.current = map)}, []);
@@ -170,7 +231,7 @@ function Map() {
   
                 <MarkerClusterer>
                   {(clusterer) =>
-                    stations.map((station) => (
+                    currentStations.map((station) => (
                       <Marker
                         key={station.lat}
                         position={station}
