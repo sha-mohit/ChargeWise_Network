@@ -14,10 +14,12 @@ import Places from "./Places";
 import Distance from "./Distance";
 import MapTheme from "./MapTheme";
 import List from '../Tiles/List';
+import DetailInfo from '../Common/DetailInfo';
 
 function Map() {
 
     const [directions, setDirections] = useState(null);
+    const [selectedStation, setSelectedStation] = useState([]);
     const mapRef = useRef();
     const [currentLocation, setCurrentLocation] = useState(/** @type google.maps.LatLng */({ lat: 17.4442, lng: 78.3932 }))
     const [searchLocation, setSearchLocation] = useState(null);
@@ -46,9 +48,8 @@ function Map() {
     // eslint-disable-next-line no-undef
     const service = new google.maps.places.PlacesService(mapRef.current);
     service.textSearch(request, (results, status) => {
-      console.log(results);
       var temp =[]
-      results.map((result)=>( console.log(result),temp.push({"id":result.place_id,"name":result.name,"status":result.business_status,"rating":result.rating,"address":result.formatted_address,"photos":result.icon})))
+      results.map((result)=>(temp.push({"id":result.place_id,"name":result.name,"status":result.business_status,"rating":result.rating,"address":result.formatted_address,"photos":result.icon})))
       setLocations(temp)
       // eslint-disable-next-line no-undef
      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
@@ -56,7 +57,9 @@ function Map() {
         _stations.push({
           lat: results[i].geometry.location.lat(),
           lng: results[i].geometry.location.lng(),
+          chargingStation: results[i]
         });
+
         //createMarker(results[i]);
       }
       setCurrentStations(_stations);
@@ -98,7 +101,11 @@ function Map() {
       },
       (result, status) => {
         if (status === "OK" && result) {
+          setIsShown(!isShown)
+          var temp = {"id":station.chargingStation.place_id,"name":station.chargingStation.name,"status":station.chargingStation.business_status,"rating":station.chargingStation.rating,"address":station.chargingStation.formatted_address,"photos":result.icon}
+          setSelectedStation(temp);
           setDirections(result);
+          console.log(selectedStation)
         }
       }
     );
@@ -194,12 +201,12 @@ function Map() {
             <Places
               setStation={(position) => {
                 setIsShown(!isShown)
+                setDirections(null)
                 setSearchLocation(position);
                 mapRef.current?.panTo(position);
               }}
             />
             {/* {!searchLocation && <p>Enter the address of EV station.</p>} */}
-            {directions && <Distance leg={directions.routes[0].legs[0]} />} 
             </Box>
             <IconButton
               aria-label='center back'
@@ -214,9 +221,10 @@ function Map() {
           </HStack>
           </Box>
         </MDBCard>
+        {directions && selectedStation && <DetailInfo chargingstation={selectedStation} />} 
       </div>
       <div>
-      {isShown&&(<List locations={locations}/>)}
+      {!directions && isShown&&(<List locations={locations}/>)}
       </div>
     </Flex>
   )

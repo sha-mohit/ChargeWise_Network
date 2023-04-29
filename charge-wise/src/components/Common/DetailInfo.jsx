@@ -12,7 +12,7 @@ import {
 
 export default function DetailInfo(props) {
   return (
-    <MDBCard style={{width:'25rem', height:'auto',margin:'0rem 0rem 0rem 1rem',borderRadius:'20px'}}>
+    <MDBCard style={{width:'25rem', height:'auto',margin:'0rem 0rem 0rem 0rem',borderRadius:'20px'}}>
       <MDBCardImage position='top' alt='...' src={'https://media.istockphoto.com/id/1251125012/photo/close-up-of-a-charging-electric-car.jpg?s=612x612&w=0&k=20&c=FYXsskzOZlSuPneNAIghjRbDKpH00946l2jlNo4anSk='} />
       <MDBCardBody>
         <MDBCardTitle>{props.chargingstation.name}</MDBCardTitle>
