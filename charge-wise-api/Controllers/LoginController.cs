@@ -10,28 +10,13 @@ namespace charge_wise_api.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
+        
         private readonly IConfiguration _configuration;
-
+        DatabaseContext db;
         public LoginController(IConfiguration configuration)
         {
             _configuration = configuration;
-        }
-
-        void getDetailsFromDB(string query, DataTable table)
-        {
-            string sqlDataSource = _configuration.GetConnectionString("ChargeWiseCon");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
+             db = new DatabaseContext(_configuration);
         }
 
         [HttpGet]
@@ -39,7 +24,7 @@ namespace charge_wise_api.Controllers
         {
             string query = @"select UserId, UserName,UserEmail,Password,UserRole from dbo.Login";
             DataTable table = new DataTable();
-            getDetailsFromDB(query, table);
+            db.getDetailsFromDB(query, table);
             return new JsonResult(table);
         }
 
@@ -49,7 +34,7 @@ namespace charge_wise_api.Controllers
         {
             string query = @"select UserRole from dbo.Login where UserEmail = '" + login.UserEmail + "' and Password = '" + login.Password + "'";
             DataTable table = new DataTable();
-            getDetailsFromDB(query, table);
+            db.getDetailsFromDB(query, table);
             if (table.Rows.Count > 0)
                 return new JsonResult(table);
             else
@@ -62,7 +47,7 @@ namespace charge_wise_api.Controllers
         {
             string query = @"select UserRole from dbo.Login where UserEmail = '" + login.UserEmail + "'";
             DataTable table = new DataTable();
-            getDetailsFromDB(query, table);
+            db.getDetailsFromDB(query, table);
             if (table.Rows.Count > 0)
                 return new JsonResult("User Already Exists");
             else

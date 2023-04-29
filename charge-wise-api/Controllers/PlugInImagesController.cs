@@ -5,6 +5,8 @@ using System.Drawing;
 using System;
 using System.IO;
 using System.Drawing.Imaging;
+using Microsoft.Extensions.Configuration;
+using System.Data;
 
 namespace charge_wise_api.Controllers
 {
@@ -12,48 +14,39 @@ namespace charge_wise_api.Controllers
     [ApiController]
     public class PlugInImagesController : ControllerBase
     {
-        PlugInImagesDataAccessLayer plugInImage = new PlugInImagesDataAccessLayer();
-
-        [HttpGet]
-        [Route("api/PlugInImages/Index")]
-        public IEnumerable<PlugInImages> Index()
+        private readonly IConfiguration _configuration;
+        DatabaseContext db;
+        public PlugInImagesController(IConfiguration configuration)
         {
-            return plugInImage.GetAllPlugInImages();
-        }
-
-        [HttpPost]
-        [Route("api/PlugInImages/Create")]
-        public int Create(PlugInImages pluginImage)
-        {
-            return plugInImage.AddPlugInImage(pluginImage);
+            _configuration = configuration;
+            db = new DatabaseContext(_configuration);
         }
 
         [HttpGet]
-        [Route("api/PlugInImages/Details/{id}")]
-        public PlugInImages Details(int id)
-        {
-            return plugInImage.GetPlugInImageFromId(id);
-        }
-
-        [HttpPut]
-        [Route("api/PlugInImages/Edit")]
-        public int Edit(PlugInImages pluginImage)
-        {
-            return plugInImage.UpdatePlugInImage(pluginImage);
-        }
-
-        [HttpDelete]
-        [Route("api/PlugInImages/Delete/{id}")]
-        public int Delete(int id)
-        {
-            return plugInImage.DeletePlugInImage(id);
-        }
-
-        [HttpPost]
         [Route("[action]")]
-        public ActionResult RetrieveImage(int ID)
+        public List<PlugInImages> GetList()
         {
-            List<PlugInImages> Images = plugInImage.GetAllPlugInImages();
+            string query = @"select * from dbo.PlugInImages";
+            DataTable table = new DataTable();
+            db.getDetailsFromDB(query, table);
+            List<PlugInImages> plugInImages = new List<PlugInImages>();
+           
+            return plugInImages;
+        }
+
+        [HttpGet]
+        public JsonResult Get()
+        {
+            string query = @"select * from dbo.PlugInImages";
+            DataTable table = new DataTable();
+            db.getDetailsFromDB(query, table);
+            return new JsonResult(table);
+        }
+
+        [HttpGet("{Plugin_Image_Id}")]
+        public JsonResult RetrieveImage(int ID)
+        {
+            List<PlugInImages> Images = GetList();
             byte[] imageData = Images.Find(x => x.Plugin_Image_Id == ID).PlugIn_Image;
             string imageBase64Data = Convert.ToBase64String(Images.Find(x => x.Plugin_Image_Id == ID).PlugIn_Image); ;
             //string imageDataURL = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
