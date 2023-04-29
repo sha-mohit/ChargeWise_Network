@@ -13,8 +13,8 @@ namespace charge_wise_api.Models
         public int ChargeStationId { get; set; }
         public string ChargeStationName { get; set; }
         public string Address { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
+        public float Latitude { get; set; }
+        public float Longitude { get; set; }
         public string Cost { get; set; }
         public bool Open247 { get; set; }
         public byte[] Icon { get; set; }

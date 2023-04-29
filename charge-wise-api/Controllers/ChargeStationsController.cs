@@ -42,7 +42,7 @@ namespace charge_wise_api.Controllers
         [Route("[action]")]
         public JsonResult AddChargeStation(ChargeStations chargeStation)
         {
-            string query = @"insert into dbo.ChargeStations values (@ChargeStationName,@Address,@Latitude,@Longitude,@Cost,@Open247,@Icon,@Total_Number_of_Ports,@Plugin_Types,@Reviews,@Renewable_Energy)";
+            string query = @"insert into dbo.ChargeStations values (@ChargeStationName,@Address,@Latitude,@Longitude,@Cost,@Open247,@Icon,@Total_Number_of_Ports,@Reviews,@Plugin_Types,@Renewable_Energy)";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("ChargeWiseCon");
             SqlDataReader myReader;
@@ -59,8 +59,8 @@ namespace charge_wise_api.Controllers
                     myCommand.Parameters.AddWithValue("@Open247", chargeStation.Open247);
                     myCommand.Parameters.AddWithValue("@Icon", chargeStation.Icon);
                     myCommand.Parameters.AddWithValue("@Total_Number_of_Ports", chargeStation.Total_Number_of_Ports);
-                    myCommand.Parameters.AddWithValue("@Plugin_Types", chargeStation.Plugin_Types);
                     myCommand.Parameters.AddWithValue("@Reviews", chargeStation.Reviews);
+                    myCommand.Parameters.AddWithValue("@Plugin_Types", chargeStation.Plugin_Types);
                     myCommand.Parameters.AddWithValue("@Renewable_Energy", chargeStation.Renewable_Energy);
 
                     myReader = myCommand.ExecuteReader();
