@@ -1,4 +1,4 @@
-import {Box,Flex,HStack,IconButton,SkeletonText,} from '@chakra-ui/react'
+import {Box,Flex,HStack,IconButton,} from '@chakra-ui/react'
 import React,{ useState, useMemo, useCallback, useRef } from "react";
 import { FaLocationArrow } from 'react-icons/fa'
 import {
@@ -6,7 +6,7 @@ import {
   Marker,
   DirectionsRenderer,
   Circle,
-  MarkerClusterer
+  MarkerClusterer,
 } from "@react-google-maps/api";
 import { MDBCard } from 'mdb-react-ui-kit'
 import { MDBBox } from 'mdbreact'
@@ -20,10 +20,10 @@ function Map() {
     const [directions, setDirections] = useState(null);
     const mapRef = useRef();
     const [currentLocation, setCurrentLocation] = useState(/** @type google.maps.LatLng */({ lat: 17.4442, lng: 78.3932 }))
-    const [searchLocation, setSearchLocation] = useState(/** @type google.maps.LatLng */({ lat: 17.443421, lng: 78.374511 }));
+    const [searchLocation, setSearchLocation] = useState(null);
     const [isShown, setIsShown] = useState(true)
     const [locations,setLocations] = useState([])
-	  const [isLoaded, setIsLoaded] = useState(0)
+	  const [currentStations, setCurrentStations] = useState([])
 
    
   React.useEffect(()=>{
@@ -33,12 +33,10 @@ function Map() {
 
   },[])
   
-
   const fetchEVStations = (position) => {
-    if(mapRef.current===null || mapRef.current===undefined){
+    if(mapRef.current===null || mapRef.current===undefined ){
       return;
     }
-    console.log("fetchEVStations"+position.lat)
     const _stations = [];
     const request = {
       location: position,
@@ -53,7 +51,7 @@ function Map() {
       results.map((result)=>( console.log(result),temp.push({"id":result.place_id,"name":result.name,"status":result.business_status,"rating":result.rating,"address":result.formatted_address,"photos":result.icon})))
       setLocations(temp)
       // eslint-disable-next-line no-undef
-    if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+     if (status === google.maps.places.PlacesServiceStatus.OK && results) {
       for (let i = 0; i < results.length; i++) {
         _stations.push({
           lat: results[i].geometry.location.lat(),
@@ -61,10 +59,12 @@ function Map() {
         });
         //createMarker(results[i]);
       }
-
+      setCurrentStations(_stations);
+      //console.log("_stations"+_stations);
       //mapRef.current.setCenter(results[0].geometry.location);
-    }
+       }
     }); 
+    //console.log("_stations"+_stations);
     return _stations;
   };
   function createMarker(place) {
@@ -107,11 +107,7 @@ function Map() {
     setDirections(null)
   };
 
-  const onLoad = useCallback((map) => {(mapRef.current = map)
-                              //console.log("inside load")
-                              setSearchLocation(currentLocation)
-                              
-                            }, []);
+  const onLoad = useCallback((map) => {(mapRef.current = map)}, []);
   const stations = useMemo(() => fetchEVStations(searchLocation), [searchLocation]);
   return (
     <Flex
@@ -127,7 +123,7 @@ function Map() {
             defaultZoom={10}
             defaultCenter={currentLocation}
             defaultOptions={{ styles: MapTheme }}
-            center={searchLocation}
+            center={currentLocation}
             zoom={12}
             mapContainerStyle={{ width: '100%', height: '100%' }}
             options={{
@@ -155,6 +151,7 @@ function Map() {
             {searchLocation && (
               <>
                 <Marker
+                  key={searchLocation.lat}
                   position={searchLocation}
                   icon="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
                 />
@@ -174,7 +171,7 @@ function Map() {
                   }
                 </MarkerClusterer>
   
-                <Circle center={searchLocation} radius={15000} options={closeOptions} />
+                <Circle  key={searchLocation.lat} center={searchLocation} radius={15000} options={closeOptions} />
                 <Circle center={searchLocation} radius={30000} options={middleOptions} />
                 <Circle center={searchLocation} radius={45000} options={farOptions} />
               </>
@@ -210,7 +207,8 @@ function Map() {
               isRound
               onClick={() => {
                 mapRef.current.panTo(currentLocation)
-                mapRef.current.setZoom(15)
+              //mapRef.current.setZoom(15)
+              searchLocation === null?setSearchLocation(currentLocation):setSearchLocation(searchLocation);
               }}
             />
           </HStack>
