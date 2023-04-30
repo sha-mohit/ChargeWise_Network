@@ -9,7 +9,8 @@ import {
   MDBContainer,
   MDBCard,
   MDBRadio,
-  MDBCheckbox
+  MDBCheckbox,
+  MDBModal
 }
 from 'mdb-react-ui-kit';
 import './Register.css';
@@ -20,13 +21,13 @@ import {motion} from 'framer-motion'
 import { REST_URL } from '../../apiUrl';
 import background from '../../images/landing2.jpg'
 
-function ChargeStationForm() {
+function ChargeStationForm(props) {
   //const [selectedLocation, setSelectedLocation] = useState(null);
   const [renewableEnergy,setRenewableEnergy] = useState("Hydro");
   const [chargeStationName,setChargeStationName] = useState("");
   const [address,setAddress] = useState("");
-  const [lalitude,setlalitude] = useState(0.0);
-  const [longitude,setlongitude] = useState(0.0);
+  const [lalitude,setlalitude] = useState(props.lat);
+  const [longitude,setlongitude] = useState(props.lng);
   const [cost,setCost] = useState("");
   const [icon,setIcon] = useState([]);
   const [open247,setopen247] = useState(true);
@@ -135,7 +136,7 @@ const fetchPluginTypes=()=>{
             .then(res=>
                 {
                     alert('Registerd successfully!') 
-                        window.location.go(-1);
+                        window.location.reload();
                 })
     }
   }
@@ -144,53 +145,29 @@ const fetchPluginTypes=()=>{
 },[])
 
   return (
-    <div style={{ 
-        backgroundImage: `url(${background})`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        width: '100vw',
-        height: '100vh',
-        overflow:'auto',
-		minHeight:'100%'
-      }}>
-            {/* {console.log(plugInTypes)} */}
-        <MDBContainer style={{padding:'2rem 0rem 2rem 0rem', width:'50%'}}>
-
-            <MDBRow className="g-0">
-        
-                <MDBCol col='6' className="mb-5">
-                    <MDBCard style={{padding:'1rem'}}>
-                    <div className="text-center">
-                    <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{scale:2}}
-                        transition={{ duration: 3 }}>
-                        <img src={logo}style={{width: '8vw', borderRadius:'100px'}} alt="logo" />
-                    </motion.div>
-                    <div>
-                        <Branding/>
-                    </div>
-                </div>
-                <br/>
-                <motion.h2 whileHover={{scale:1.1}} className="mt-1 md pb-5"><center>Charge Station Register</center></motion.h2>   
+        <MDBContainer style={{ width:'500px', marginInlineEnd:'0', overflowY:'scroll'}}>
+            <MDBRow>
+                <MDBCol>
+                    <MDBCard style={{padding:'0rem 1rem 0rem 1rem'}}>
+                <center><p>Charge Station Register</p></center> 
                 <MDBValidation>
                     <MDBValidationItem invalid feedback="Name cannot be empty">
-                        <MDBInput wrapperClass='mb-4'  placeholder='Charge station name' id='name' type='name' autoComplete="false" onChange={onChangeChargeStationName} required/>
+                        <MDBInput wrapperClass='mb-2'  placeholder='Charge station name' id='name' type='name' autoComplete="false" onChange={onChangeChargeStationName} required/>
                     </MDBValidationItem>
                     <MDBValidationItem invalid feedback="Address cannot be empty">
-                        <MDBInput wrapperClass='mb-4' placeholder='Address' id='address' type='text' autoComplete="false" onChange={onChangeAddress} required/>
+                        <MDBInput wrapperClass='mb-2' placeholder='Address' id='address' type='text' autoComplete="false" onChange={onChangeAddress} required/>
                     </MDBValidationItem>
                     <MDBValidationItem invalid feedback="Latitude cannot be empty">
-                        <MDBInput wrapperClass='mb-4' placeholder='Latitude' id='latitude' type='float' autoComplete="false" onChange={onChangelalitude} required/>
+                        <MDBInput wrapperClass='mb-2' placeholder='Latitude' id='latitude' type='float' value={lalitude} autoComplete="false" onChange={onChangelalitude} required disabled/>
                     </MDBValidationItem>
                     <MDBValidationItem invalid feedback="Longitude cannot be empty">
-                        <MDBInput wrapperClass='mb-4' placeholder='Longitude' id='longitude' type= 'float' autoComplete="false" onChange={onChangelongitude} required/>
+                        <MDBInput wrapperClass='mb-2' placeholder='Longitude' id='longitude' type= 'float' value={longitude} autoComplete="false" onChange={onChangelongitude} required disabled/>
                     </MDBValidationItem>
                     <MDBValidationItem invalid feedback="Field cannot be empty">
-                        <MDBInput wrapperClass='mb-4' placeholder='Cost' id='cost' type= 'text' autoComplete="false" onChangeCapture={onChangecost} required/>
+                        <MDBInput placeholder='Cost' id='cost' type= 'text' autoComplete="false" onChangeCapture={onChangecost} required/>
                     </MDBValidationItem>
                     <div className="d-flex flex-row" style={{color:'gray'}}>
-                    <div className="d-flex flex-row justify-content-center" style={{padding:`0rem 0rem 1rem 1rem`}}>
+                    <div className="d-flex flex-row justify-content-center" style={{padding:`0rem 0rem 0.5rem 1rem`}}>
                         <br/>
                             <MDBCheckbox name='open' value='' id='flexCheckChecked' defaultChecked inline onChangeCapture={onChangeopen247} />
                      </div>
@@ -201,7 +178,7 @@ const fetchPluginTypes=()=>{
                     </MDBValidationItem>
                     <div className="d-flex flex-row" style={{color:'gray'}}>
                     <label type='label' value='Renewable Energy'>Renewable Energy</label>
-                    <div className="d-flex flex-row justify-content-center" style={{padding:`0rem 0rem 1rem 1rem`}}>
+                    <div className="d-flex flex-row justify-content-center" style={{padding:`0rem 0rem 0.5rem 1rem`}}>
                         <br/>
                             <MDBRadio name='renewableEnergy' id='hydro' value='Hydro' label='Hydro' inline onChangeCapture={onChangeRenewableEnergy}/>
                             <MDBRadio name='renewableEnergy' id='wind' value='Wind' label='Wind' inline onChangeCapture={onChangeRenewableEnergy}/>
@@ -223,7 +200,7 @@ const fetchPluginTypes=()=>{
                         </div>
                      </div>
                      </MDBValidationItem>
-                    <div className="text-center pt-1 mb-5 pb-1">
+                    <div className="text-center">
                         <button className="text-white mb-4 w-100 gradient-custom-2" onClick={CSRegister}>Register</button>
                     </div>
                 </MDBValidation>
@@ -231,8 +208,6 @@ const fetchPluginTypes=()=>{
                     </MDBCol>      
             </MDBRow> 
         </MDBContainer>
-        <Footer/>
-    </div>
   );
 }
 

@@ -21,7 +21,7 @@ import background from '../../images/landing2.jpg'
 import ev from '../../images/ev.gif'
 
 function Login() {
-    const [role,setRole] = useState("User")
+    const [role,setRole] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
@@ -46,7 +46,7 @@ function Login() {
             headers.append('Accept','application/json');
             headers.append('Content-Type','application/json');
             headers.append('POST','GET');
-            fetch(`${REST_URL}/api/login/isuser`,{
+            fetch(`${REST_URL}/api/Login/IsUser`,{
                 headers: headers,
                 method: 'POST',
                 body: JSON.stringify(body)
@@ -55,8 +55,8 @@ function Login() {
                 .then(res=>{
                     if(res !== "No User Found")
                     {
-                        setRole(res.UserRole)
-                        localStorage.setItem("role",role)
+                        setRole(res)
+                        localStorage.setItem("role",res[0].UserRole)
                         window.location.href = "/home"
                     }
                     else

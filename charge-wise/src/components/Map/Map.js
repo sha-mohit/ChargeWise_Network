@@ -15,6 +15,7 @@ import MapTheme from "./MapTheme";
 import List from '../Tiles/List';
 import DetailInfo from '../Common/DetailInfo';
 import { REST_URL } from '../../apiUrl';
+import ChargeStationForm from '../Register/ChargeStationsRegister'
 
 function Map() {
 
@@ -27,6 +28,8 @@ function Map() {
     const [locations,setLocations] = useState([])
 	  const [currentStations, setCurrentStations] = useState([])
     const [stationsInDB,setStationsInDB] = useState([])
+    const [showDetail,setShowDetail] = useState(false)
+    const [registerStation, setRegisterStation] = useState(null)
 
    
   React.useEffect(()=>{
@@ -113,6 +116,7 @@ function Map() {
   const fetchDirections = (station) => {
     
     if (!searchLocation) return;
+    setShowDetail(true);
     clearRoute();
     // eslint-disable-next-line no-undef
     const service = new google.maps.DirectionsService();
@@ -280,13 +284,13 @@ function Map() {
                         position={{lat:station.lat,lng:station.lng}}
                         clusterer={clusterer}
                         onClick={() => {
-                          fetchDirections(station);
+                          {station.chargingStation===""?setRegisterStation(station):fetchDirections(station)}
                         }}
                         options={
                           {
                            icon: {
-                              url: "https://www.freeiconspng.com/thumbs/location-icon-png/map-location-icon-29.png",
-                              scaledSize: new window.google.maps.Size(60, 60),
+                              url: station.chargingStation===""?"https://cdn1.iconfinder.com/data/icons/social-messaging-ui-color/254000/66-512.png":( (station.chargingStation.place_id!=null ?"https://pngimg.com/d/google_maps_pin_PNG76.png":"https://icon-library.com/images/a2e6cf209c.svg.svg")),
+                              scaledSize: new window.google.maps.Size(40, 40),
                             },
                           }
                         }
@@ -305,7 +309,7 @@ function Map() {
         </Box>
       </MDBBox>
       
-      <div style={{padding:'5rem 5rem 0rem 0rem', width:'30rem'}} >
+      <span style={{padding:'5rem 5rem 0rem 0rem', width:'30rem'}} >
         <MDBCard>
         {localStorage.getItem("role")!== null && localStorage.getItem("role").includes("Provider")?
             <div style={{padding:'1rem'}}>
@@ -344,11 +348,12 @@ function Map() {
           </HStack>
           </Box>
         </MDBCard>
-        {directions && selectedStation && <DetailInfo chargingstation={selectedStation} />} 
-      </div>
-      <div>
+        {directions && selectedStation && <DetailInfo chargingstation={selectedStation} show={showDetail} close = {()=>{setShowDetail(false)}}/>} 
+      </span>
+      <span>
       {!directions && isShown&&(<List locations={locations}/>)}
-      </div>
+      </span>
+      {registerStation && <ChargeStationForm lat={registerStation.lat} lng={registerStation.lng}/>}
     </Flex>
   )
 }
