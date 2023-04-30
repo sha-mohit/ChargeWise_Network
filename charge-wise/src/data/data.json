@@ -4,29 +4,28 @@
     "paragraph": "A network of electric vehicle charging stations powered by renewable energy, promoting sustainable transportation and reducing carbon emissions."
   },
   "About": {
-    "paragraph": "Need to write about",
+    "paragraph": "Welcome to the ChargeWise Network app, your one-stop solution for all your electric vehicle (EV) charging needs,Our app is designed to make it easy for EV drivers to find and use charging stations, as well as for charging station providers to install new stations at feasible locations.The ChargeWise Network app features a comprehensive database of current EV charging locations across the country, including Level 2 charging stations and DC fast chargers. With our app, you can easily search for charging stations near your current location or a specific address, and filter results by station type and availability.",
     "Why": [
-      "some points",
-      "1",
-      "2",
-      "3"
+      "Providers to identify feasible locations for new charging stations and optimize your network",
+      "Easy accessibility of chargin station information",
+      "Our ultimate goal is to provide sustainable environment by providing a comprehensive and reliable EV charging infrastructure."
     ]
   },
   "Services": [
     {
-      "icon": "fa fa-wordpress",
+      "icon": "fa fa-taxi",
       "name": "Providing Business",
-      "text": ""
+      "text": "Power up your business and attract eco-conscious customers with the ChargeWise Network app, providing easy installation and management of electric vehicle charging stations"
     },
     {
-      "icon": "fa fa-cart-arrow-down",
+      "icon": "fa fa-location-arrow",
       "name": "Fetching Near by Charging stations",
-      "text": ""
+      "text": "one-stop solution for locating nearby electric vehicle charging stations"
     },
     {
-      "icon": "fa fa-cloud-download",
-      "name": "Some other feature",
-      "text": ""
+      "icon": "fa fa-magic",
+      "name": "Sustainable Solution",
+      "text": "Join the EV revolution and drive towards a sustainable future with the ChargeWise Network app - the comprehensive and reliable solution for electric vehicle charging infrastructure."
     }
   ],
   "Team": [
