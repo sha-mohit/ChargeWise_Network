@@ -1,5 +1,5 @@
 import {Box,Flex,HStack,IconButton,} from '@chakra-ui/react'
-import React,{ useState, useMemo, useCallback, useRef } from "react";
+import React,{ useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { FaLocationArrow } from 'react-icons/fa'
 import {
   GoogleMap,
@@ -11,10 +11,10 @@ import {
 import { MDBCard } from 'mdb-react-ui-kit'
 import { MDBBox } from 'mdbreact'
 import Places from "./Places";
-import Distance from "./Distance";
 import MapTheme from "./MapTheme";
 import List from '../Tiles/List';
 import DetailInfo from '../Common/DetailInfo';
+import { REST_URL } from '../../apiUrl';
 
 function Map() {
 
@@ -26,20 +26,37 @@ function Map() {
     const [isShown, setIsShown] = useState(true)
     const [locations,setLocations] = useState([])
 	  const [currentStations, setCurrentStations] = useState([])
+    const [stationsInDB,setStationsInDB] = useState([])
 
    
   React.useEffect(()=>{
    navigator.geolocation.getCurrentPosition((position)=>{
     setCurrentLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+    console.log("Hiiii")
+    fetchEVStationsInDB();
    })
-
   },[])
-  
+  function fetchEVStationsInDB(){
+    let headers = new Headers();
+        headers.append('Accept','application/json');
+        headers.append('Content-Type','application/json');
+        headers.append('POST','GET');
+        const requestOptions = {
+                method: 'GET',
+                headers: headers,
+        };
+        fetch(`${REST_URL}/api/ChargeStations`,requestOptions)
+        .then(response=>{return response.json()})
+        .then(res=>{stationsInDB.length==0?setStationsInDB(res):console.log("Hi"+res)})
+        console.log("DB---->"+stationsInDB)
+  };
+
   const fetchEVStations = (position) => {
     if(mapRef.current===null || mapRef.current===undefined ||position===null){
       return;
     }
     const _stations = [];
+    //fetchEVStationsInDB();
     const request = {
       location: position,
       radius: '5000',
@@ -48,22 +65,29 @@ function Map() {
     // eslint-disable-next-line no-undef
     const service = new google.maps.places.PlacesService(mapRef.current);
     service.textSearch(request, (results, status) => {
-      var temp =[]
-      results.map((result)=>(temp.push({"id":result.place_id,"name":result.name,"status":result.business_status,"rating":result.rating,"address":result.formatted_address,"photos":result.icon})))
-      setLocations(temp)
       // eslint-disable-next-line no-undef
      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+      var temp =[]
+      results.map((result)=>(temp.push({"id":result.place_id,"name":result.name,"status":result.business_status,"rating":result.rating,"address":result.formatted_address,"photos":result.icon,"RenewableEnergy":"","PlugInTypes":"","TotalPorts":0})))
+      stationsInDB.map((result)=>(temp.push({"id":result.ChargeStationID,"name":result.ChargeStationName,"status":result.Open247,"rating":result.Reviews.length,"address":result.Address,"photos":result.Icon,"RenewableEnergy":result.Renewable_Energy,"PlugInTypes":result.Plugin_Types,"TotalPorts":result.Total_Number_of_Ports})))
+      console.log(stationsInDB)
+      setLocations(temp)
       for (let i = 0; i < results.length; i++) {
         _stations.push({
           lat: results[i].geometry.location.lat(),
           lng: results[i].geometry.location.lng(),
-          chargingStation: results[i]
-        });
-
+          chargingStation: results[i]});
+        
         //createMarker(results[i]);
       }
+      for(let i=0;i<stationsInDB.length;i++){
+        _stations.push({
+          lat: Number(stationsInDB[i].Latitude),
+          lng: Number(stationsInDB[i].Longitude),
+          chargingStation: stationsInDB[i]})
+      }
       setCurrentStations(_stations);
-      //console.log("_stations"+_stations);
+      console.log("_stations"+_stations.lat);
       //mapRef.current.setCenter(results[0].geometry.location);
        }
     }); 
@@ -78,7 +102,7 @@ function Map() {
     const marker = new google.maps.Marker({
       map,
       position: place.geometry.location,
-      icon:"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
+      icon:"https://cdn1.vectorstock.com/i/1000x1000/62/80/map-pointer-location-icon-blue-pin-on-white-vector-21666280.jpg"
     });
     
     /* google.maps.event.addListener(marker, "click", () => {
@@ -92,9 +116,10 @@ function Map() {
     clearRoute();
     // eslint-disable-next-line no-undef
     const service = new google.maps.DirectionsService();
+    let stationInfo = station.chargingStation;
     service.route(
       {
-        origin: station,
+        origin: {lat:station.lat,lng:station.lng},
         destination: searchLocation,
         // eslint-disable-next-line no-undef
         travelMode: google.maps.TravelMode.DRIVING,
@@ -102,7 +127,15 @@ function Map() {
       (result, status) => {
         if (status === "OK" && result) {
           setIsShown(!isShown)
-          var temp = {"id":station.chargingStation.place_id,"name":station.chargingStation.name,"status":station.chargingStation.business_status,"rating":station.chargingStation.rating,"address":station.chargingStation.formatted_address,"photos":result.icon}
+          var temp = {"id":stationInfo.place_id!=null?stationInfo.place_id:stationInfo.ChargeStationID,
+          "name":stationInfo.name!=null?stationInfo.name:stationInfo.ChargeStationName,
+          "status":stationInfo.business_status!=null?stationInfo.business_status:stationInfo.Open247,
+          "rating":stationInfo.rating!=null?stationInfo.rating:stationInfo.Reviews.length,
+          "address":stationInfo.formatted_address!=null?stationInfo.formatted_address:stationInfo.Address,
+          "photos":result.icon!=null?result.icon:result.Icon,
+          "RenewableEnergy":result.Renewable_Energy!=null?result.Renewable_Energy:"",
+          "PlugInTypes":result.Plugin_Types!=null?result.Plugin_Types:"",
+          "TotalPorts":result.Total_Number_of_Ports!=null?result.Total_Number_of_Ports:0}
           setSelectedStation(temp);
           setDirections(result);
           console.log(selectedStation)
@@ -162,9 +195,11 @@ function Map() {
       let pathDistribution =( Math.floor(
         (filteredRoutes[i].routes[0].overview_path.length) / distribution )
       );
-      console.log("pathDistribution-->"+pathDistribution+"--lenth-->"+filteredRoutes[i].routes[0].overview_path.length)
+      //console.log("pathDistribution-->"+pathDistribution+"--lenth-->"+filteredRoutes[i].routes[0].overview_path.length)
       for (let j = 1; j < distribution; j++) { 
-        suitableLocations.push(filteredRoutes[i].routes[0].overview_path[pathDistribution*(j)])
+        var fesibleLocation = filteredRoutes[i].routes[0].overview_path[pathDistribution*(j)];
+        //console.log("fesibleLocation----->"+fesibleLocation.lat())
+        suitableLocations.push({lat:fesibleLocation.lat(),lng:fesibleLocation.lng(),chargingStation:""})
       }
     }
     setCurrentStations([...currentStations,...suitableLocations]);
@@ -181,7 +216,8 @@ function Map() {
   }
 
   const onLoad = useCallback((map) => {(mapRef.current = map)}, []);
-  const stations = useMemo(() => fetchEVStations(searchLocation), [searchLocation]);
+  const stations = useMemo(() =>fetchEVStations(searchLocation), [searchLocation]);
+
   return (
     <Flex
       position='relative'
@@ -226,19 +262,34 @@ function Map() {
                 <Marker
                   key={searchLocation.lat}
                   position={searchLocation}
-                  icon="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
+                  options={
+                    {
+                     icon: {//current
+                        url: "https://cdn3.iconfinder.com/data/icons/maps-33/32/Human_location_person_user_icon-512.png",
+                        scaledSize: new window.google.maps.Size(50, 50),
+                      },
+                    }
+                  }
                 />
   
                 <MarkerClusterer>
                   {(clusterer) =>
                     currentStations.map((station) => (
                       <Marker
-                        key={station.lat}
-                        position={station}
+                        //key={station.chargingStation.place_id!=null?station.chargingStation.place_id:station.chargingStation.ChargeStationID}
+                        position={{lat:station.lat,lng:station.lng}}
                         clusterer={clusterer}
                         onClick={() => {
                           fetchDirections(station);
                         }}
+                        options={
+                          {
+                           icon: {
+                              url: "https://www.freeiconspng.com/thumbs/location-icon-png/map-location-icon-29.png",
+                              scaledSize: new window.google.maps.Size(60, 60),
+                            },
+                          }
+                        }
                       />
                     ))
                   }
@@ -285,6 +336,7 @@ function Map() {
               isRound
               onClick={() => {
                 mapRef.current.panTo(currentLocation)
+                fetchEVStationsInDB();
               //mapRef.current.setZoom(15)
               searchLocation === null?setSearchLocation(currentLocation):setSearchLocation(searchLocation);
               }}
