@@ -14,11 +14,11 @@ import DetailInfo from '../Common/DetailInfo';
 
 export default function List(props) {
   const [basicActive, setBasicActive] = useState('');
-
+  const [show, setShow] = useState(false)
   const handleBasicClick = (value) => {
     setBasicActive(value);
+    setShow(true)
   }
-
   return (
     <div className='d-flex flex-row'>
         <MDBCard style={{maxHeight:'70vh',overflowY:'auto', overflowX:'hidden', width:'25rem', borderRadius:'20px'}}>
@@ -39,8 +39,7 @@ export default function List(props) {
                 </MDBCol>
             </MDBRow>
         </MDBCard>
-        {basicActive &&
-            <DetailInfo chargingstation={basicActive}/>}
+        {<DetailInfo chargingstation={basicActive} show={show} close = {()=>{setShow(false)}}/>}
     </div>
   );
 }

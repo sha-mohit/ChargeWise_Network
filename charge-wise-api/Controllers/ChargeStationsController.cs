@@ -42,7 +42,7 @@ namespace charge_wise_api.Controllers
         [Route("[action]")]
         public JsonResult AddChargeStation(ChargeStations chargeStation)
         {
-            string query = @"insert into dbo.ChargeStations values (@ChargeStationName,@Address,@Latitude,@Longitude,@Cost,@Open247,@Icon,@Total_Number_of_Ports,@Reviews,@Plugin_Types,@Renewable_Energy)";
+            string query = @"insert into dbo.ChargeStations values (@ChargeStationName,@Address,@Latitude,@Longitude,@Cost,@Open247,@Icon,@Total_Number_of_Ports,@Plugin_Types,@Renewable_Energy)";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("ChargeWiseCon");
             SqlDataReader myReader;

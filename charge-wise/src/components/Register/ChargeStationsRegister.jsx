@@ -19,8 +19,6 @@ import logo from '../../images/logo.PNG'
 import {motion} from 'framer-motion'
 import { REST_URL } from '../../apiUrl';
 import background from '../../images/landing2.jpg'
-import { Label } from '@mui/icons-material';
-import { Combobox } from '@reach/combobox';
 
 function ChargeStationForm() {
   //const [selectedLocation, setSelectedLocation] = useState(null);
@@ -78,12 +76,10 @@ function ChargeStationForm() {
 
   const onChangeRenewableEnergy=(e)=>{
     setRenewableEnergy(e.target.value)
-    console.log(e.target.value)
 }
 
 const onChangeOtherenewableEnergy=(e)=>{
     setRenewableEnergy(e.target.value)
-    console.log(e.target.value)
 }
 const handlePluginChange=(e)=>{
     var options = [...e.target.selectedOptions];
@@ -91,20 +87,13 @@ const handlePluginChange=(e)=>{
     setSelectedPlugin(values.join(", "));
 }
 
-//   const handleMapClick = (event) => {
-//     setSelectedLocation({
-//       lat: event.lat,
-//       lng: event.lng
-//     });
-//   }
-
 const fetchPluginTypes=()=>{
     let headers = new Headers();
 	headers.append('Accept','application/json');
 	headers.append('Content-Type','application/json');
 	headers.append('POST','GET');
-        fetch(`${REST_URL}/api/PlugInImages`,{
-        headers:headers,
+    fetch(`${REST_URL}/api/PlugInImages`,{
+    headers:headers,
         method: 'GET'
     })
     .then(response=>{return response.json()})
@@ -186,33 +175,33 @@ const fetchPluginTypes=()=>{
                 <motion.h2 whileHover={{scale:1.1}} className="mt-1 md pb-5"><center>Charge Station Register</center></motion.h2>   
                 <MDBValidation>
                     <MDBValidationItem invalid feedback="Name cannot be empty">
-                        <MDBInput wrapperClass='mb-4'  placeholder='Charge station name' id='name' type='name' autoComplete={false} onChange={onChangeChargeStationName} required/>
+                        <MDBInput wrapperClass='mb-4'  placeholder='Charge station name' id='name' type='name' autoComplete="false" onChange={onChangeChargeStationName} required/>
                     </MDBValidationItem>
                     <MDBValidationItem invalid feedback="Address cannot be empty">
-                        <MDBInput wrapperClass='mb-4' placeholder='Address' id='address' type='text' onChange={onChangeAddress} required/>
+                        <MDBInput wrapperClass='mb-4' placeholder='Address' id='address' type='text' autoComplete="false" onChange={onChangeAddress} required/>
                     </MDBValidationItem>
                     <MDBValidationItem invalid feedback="Latitude cannot be empty">
-                        <MDBInput wrapperClass='mb-4' placeholder='Latitude' id='latitude' type='float' onChange={onChangelalitude} required/>
+                        <MDBInput wrapperClass='mb-4' placeholder='Latitude' id='latitude' type='float' autoComplete="false" onChange={onChangelalitude} required/>
                     </MDBValidationItem>
                     <MDBValidationItem invalid feedback="Longitude cannot be empty">
-                        <MDBInput wrapperClass='mb-4' placeholder='Longitude' id='longitude' type= 'float' onChange={onChangelongitude} required/>
+                        <MDBInput wrapperClass='mb-4' placeholder='Longitude' id='longitude' type= 'float' autoComplete="false" onChange={onChangelongitude} required/>
                     </MDBValidationItem>
                     <MDBValidationItem invalid feedback="Field cannot be empty">
-                        <MDBInput wrapperClass='mb-4' placeholder='Cost' id='cost' type= 'text' onChangeCapture={onChangecost} required/>
+                        <MDBInput wrapperClass='mb-4' placeholder='Cost' id='cost' type= 'text' autoComplete="false" onChangeCapture={onChangecost} required/>
                     </MDBValidationItem>
-                    <div className='d-flex flex-row' style={{color:'gray'}}>
-                    <div className='d-flex flex-row justify-content-center' style={{padding:`0rem 0rem 1rem 1rem`}}>
+                    <div className="d-flex flex-row" style={{color:'gray'}}>
+                    <div className="d-flex flex-row justify-content-center" style={{padding:`0rem 0rem 1rem 1rem`}}>
                         <br/>
                             <MDBCheckbox name='open' value='' id='flexCheckChecked' defaultChecked inline onChangeCapture={onChangeopen247} />
                      </div>
                     <label type='label' value='Open 24/7'>Open 24/7</label>
                      </div>
                     <MDBValidationItem invalid feedback="Field cannot be empty">
-                        <MDBInput wrapperClass='mb-4' placeholder='Total number of ports' id='noofports' type= 'text' onChangeCapture={onChangetotalNumerofPorts} required/>
+                        <MDBInput wrapperClass='mb-4' placeholder='Total number of ports' id='noofports' type= 'text' autoComplete="false" onChangeCapture={onChangetotalNumerofPorts} required/>
                     </MDBValidationItem>
-                    <div className='d-flex flex-row' style={{color:'gray'}}>
+                    <div className="d-flex flex-row" style={{color:'gray'}}>
                     <label type='label' value='Renewable Energy'>Renewable Energy</label>
-                    <div className='d-flex flex-row justify-content-center' style={{padding:`0rem 0rem 1rem 1rem`}}>
+                    <div className="d-flex flex-row justify-content-center" style={{padding:`0rem 0rem 1rem 1rem`}}>
                         <br/>
                             <MDBRadio name='renewableEnergy' id='hydro' value='Hydro' label='Hydro' inline onChangeCapture={onChangeRenewableEnergy}/>
                             <MDBRadio name='renewableEnergy' id='wind' value='Wind' label='Wind' inline onChangeCapture={onChangeRenewableEnergy}/>
@@ -220,16 +209,15 @@ const fetchPluginTypes=()=>{
                             <MDBRadio name='renewableEnergy' id='other' value='Other' label='Other' inline onChangeCapture={onChangeRenewableEnergy}/>
                      </div>
                      </div>
-                     {console.log(renewableEnergy)}
                      {renewableEnergy.includes("Hydro") || renewableEnergy.includes("Wind") || renewableEnergy.includes("Solar")? 
                      <></>:<MDBValidationItem invalid feedback="Field cannot be empty">
                      <MDBInput wrapperClass='mb-4' placeholder='Please Specify' id='otherType' type= 'text' onChange={onChangeOtherenewableEnergy} required/>
                      </MDBValidationItem>}
                      <MDBValidationItem>
-                     <div className='d-flex flex-row' style={{color:'gray'}}>
+                     <div className="d-flex flex-row" style={{color:'gray'}}>
                      <label type='label' value='PlugIn Type'>PlugIn Types</label>
-                        <div className='d-flex flex-row justify-content-center' style={{padding:`0rem 0rem 1rem 1rem`}}>
-                            <select class="select" onChange={handlePluginChange} style={{width: '250px',height:'auto',borderRadius: '10px'}} multiple = {true}>
+                        <div className="d-flex flex-row justify-content-center" style={{padding:`0rem 0rem 1rem 1rem`}}>
+                            <select className="select" onChange={handlePluginChange} style={{width: '250px',height:'auto',borderRadius: '10px'}} multiple = {true}>
                                 {plugInTypes.map(arrayItem => <option value={arrayItem.Plugin_Image_Name}>{arrayItem.PlugIn_Image_Name}</option>)}
                             </select>
                         </div>
